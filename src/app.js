@@ -1,23 +1,39 @@
 const express = require("express");
 const app = express();
+const connectDb = require("../config/database");
+const User = require("../model/user");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.post("/signup", async(req, res) => {
+    const user = new User({
+        firstName: "Jolly",
+        lastName: "Doe",    
+        email: "aaaa@gmail.com",
+        password: "12345"
+    })
+    try{
+        await user.save();
+        res.status(200).send("User created");
+        console.log("User created");
+    } catch(err){
+        res.status(500).send("Error creating user: " + err.message);
+        console.error("Error creating user: ", err);
+    }
+    
+});
+app.get("/", (req, res) => {
+    res.send("Welcome to Devtinder!");
+});
 
-app.use("/hello/abc/123", (req, res) => {
-    res.send( "hello abc 123");
-});
-app.use("/hello/abc", (req, res) => {
-    res.send( " hello abc");
-});
-app.use("/hello", (req, res) => {
-    res.send( "abc");
-});
-app.use("/home", (req, res) => {
-    res.send("home page");
-});
-app.use((req, res) => {
-    res.send("hey, finally i started the node journey");
+connectDb().
+then(() => {
+    console.log("Database connected successfully");
+    app.listen(3000, () => {
+        console.log("app is running")
+    })
 })
-
-app.listen(3000, () => {
-    console.log("app is running")
+.catch((err) => {
+    console.error("Database connection failed", err);
 });
+
