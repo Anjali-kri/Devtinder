@@ -6,12 +6,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.post("/signup", async(req, res) => {
-    const user = new User({
-        firstName: "Jolly",
-        lastName: "Doe",    
-        email: "aaaa@gmail.com",
-        password: "12345"
-    })
+    const user = new User(req.body)
     try{
         await user.save();
         res.status(200).send("User created");
