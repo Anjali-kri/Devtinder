@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/", authrouter);
-app.use("/profile", profileRouter);
+app.use("/", profileRouter);
 
 app.get("/users", async(req, res) => {
     const userEmail = req.query.email;
